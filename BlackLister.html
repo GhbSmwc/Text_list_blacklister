@@ -1,0 +1,76 @@
+<html>
+	<head>
+		<style>
+			html {
+			background-color: white;
+			color: black;
+			font-family: sans-serif;
+			}
+			
+			table, th, td {
+			border: 1px solid black;
+			border-collapse: collapse;
+			}
+			
+			span.NoLineBreak {
+				white-space: nowrap;
+			}
+		</style>
+	</head>
+<body>
+
+<table>
+<tr>
+<td>
+Submit the list you want to process (each linebreak/newline is reguarded as one item):
+<textarea id="ListOfUrls" cols="100" rows="25" oninput="Process()"></textarea>
+</td>
+<td>
+Submit the list of things you want to be removed from:
+<textarea id="BlackList" cols="100" rows="25" oninput="Process()"></textarea>
+</td>
+</tr>
+</table><br>
+Output:
+<table><tr><td><span id="OutputText"></span></td></tr></table>
+
+<script>
+	function Process() {
+		var List = (document.getElementById("ListOfUrls").value).split('\n')
+		var BlackList = (document.getElementById("BlackList").value).split('\n')
+		var OutputList = new Array(0)
+		var LoopCount = 0
+		var LoopCount2 = 0
+		var MatchFound = false
+		var OutputHTMLFilterList = ""
+		//Compare each of a given list to each item in the blacklist.
+			while (LoopCount < List.length) {
+				MatchFound = false
+				//Compare with List with each item in BlackList
+					LoopCount2 = 0
+					while (LoopCount2 < BlackList.length) {
+						//If a given item in the main list matches with any item in the blacklist, mark a match is found
+							if (List[LoopCount] == BlackList[LoopCount2]) {
+								MatchFound = true
+							}
+						//Next item in blacklist to compare.
+							LoopCount2++
+					}
+				//If a match is found, don't put it on the list.
+					if (MatchFound == false) {
+						OutputList.push(List[LoopCount])
+					}
+				//Next item in the main list
+					LoopCount++
+			}
+		//Output the list
+			LoopCount = 0
+			while (LoopCount < OutputList.length) {
+				OutputHTMLFilterList += OutputList[LoopCount] + "<br>"
+				
+				LoopCount++
+			}
+			document.getElementById("OutputText").innerHTML = OutputHTMLFilterList
+	}
+
+</script>
